@@ -13,3 +13,6 @@ dist-ssr/
 .DS_Store
 backend/dev.db
 backend/dev.db-journal
+
+.vercel
+.env*.local
