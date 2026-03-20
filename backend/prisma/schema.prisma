@@ -1,0 +1,81 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String         @id @default(uuid())
+  nome          String
+  email         String         @unique
+  senha         String
+  gastos        Gasto[]
+  materiais     Material[]
+  ferramentas   Ferramenta[]
+  maoDeObras    MaoDeObra[]
+  planejamentos Planejamento[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Gasto {
+  id        String   @id @default(uuid())
+  nome      String
+  descricao String?
+  valor     Float
+  data      DateTime
+  categoria String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Material {
+  id             String   @id @default(uuid())
+  nome           String
+  quantidade     Float
+  valor_unitario Float
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Ferramenta {
+  id        String   @id @default(uuid())
+  nome      String
+  custo     Float
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MaoDeObra {
+  id                String   @id @default(uuid())
+  nome_profissional String
+  tipo_servico      String
+  valor             Float
+  data              DateTime
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Planejamento {
+  id             String   @id @default(uuid())
+  nome           String
+  categoria      String
+  quantidade     Float
+  valor_estimado Float
+  status         String   @default("pendente") // pendente, comprado
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
